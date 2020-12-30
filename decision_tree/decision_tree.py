@@ -197,7 +197,8 @@ if __name__ == '__main__':
     test_predict = predict(test_features,tree)
     score = accuracy_score(test_labels,test_predict)
 
-    print "The accruacy socre is ", score
+    print("The accruacy socre is ", score)
+
 
 
 
