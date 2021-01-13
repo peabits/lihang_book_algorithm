@@ -6,8 +6,7 @@ import logging
 import numpy as np
 import pandas as pd
 
-
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 
@@ -29,7 +28,7 @@ def log(func):
 # 二值化
 def binaryzation(img):
     cv_img = img.astype(np.uint8)
-    cv2.threshold(cv_img,50,1,cv2.cv.CV_THRESH_BINARY_INV,cv_img)
+    cv2.threshold(cv_img, 50, 1, cv2.cv.CV_THRESH_BINARY_INV, cv_img)
     return cv_img
 
 @log
@@ -51,13 +50,13 @@ def binaryzation_features(trainset):
 
 
 class Tree(object):
-    def __init__(self,node_type,Class = None, feature = None):
+    def __init__(self, node_type, Class = None, feature = None):
         self.node_type = node_type
         self.dict = {}
         self.Class = Class
         self.feature = feature
 
-    def add_tree(self,val,tree):
+    def add_tree(self, val, tree):
         self.dict[val] = tree
 
     def predict(self,features):
@@ -96,7 +95,7 @@ def calc_condition_ent(x, y):
 
     return ent
 
-def calc_ent_grap(x,y):
+def calc_ent_grap(x, y):
     """
         calculate ent grap
     """
@@ -107,7 +106,7 @@ def calc_ent_grap(x,y):
 
     return ent_grap
 
-def recurse_train(train_set,train_label,features,epsilon):
+def recurse_train(train_set, train_label, features, epsilon):
     global total_class
 
     LEAF = 'leaf'
@@ -119,7 +118,7 @@ def recurse_train(train_set,train_label,features,epsilon):
         return Tree(LEAF,Class = label_set.pop())
 
     # 步骤2——如果features为空
-    (max_class,max_len) = max([(i,len(filter(lambda x:x==i,train_label))) for i in xrange(total_class)],key = lambda x:x[1])
+    (max_class, max_len) = max([(i,len(filter(lambda x:x == i, train_label))) for i in range(total_class)], key = lambda x:x[1])
 
     if len(features) == 0:
         return Tree(LEAF,Class = max_class)
@@ -150,7 +149,7 @@ def recurse_train(train_set,train_label,features,epsilon):
     for feature_value in feature_value_list:
 
         index = []
-        for i in xrange(len(train_label)):
+        for i in range(len(train_label)):
             if train_set[i][max_feature] == feature_value:
                 index.append(i)
 
@@ -181,7 +180,7 @@ if __name__ == '__main__':
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
-    raw_data = pd.read_csv('../data/train.csv',header=0)
+    raw_data = pd.read_csv('../data/train.csv', header=0)
     data = raw_data.values
 
     imgs = data[0::,1::]
